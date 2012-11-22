@@ -4542,31 +4542,4 @@
 
     <!-- Text to display in regulatory info screen (from device overlay). -->
     <string name="regulatory_info_text"></string>
-
-    <!-- Wireless display -->
-    <string name="pref_wifi_disable_hdcp_title">Skip HDCP negotiation</string>
-    <string name="pref_wifi_disable_hdcp_summary">Try this option if you can connect but don\'t get any output</string>
-
-    <!-- USB Mass Storage -->
-    <string name="usb_mass_storage_title">Mass storage</string>
-    <string name="usb_mass_storage_summary">Enable USB mass storage</string>
-
-    <!-- Stylus Icon -->
-    <string name="stylus_icon_enabled_title">Show icon when using stylus</string>
-    <string name="stylus_icon_enabled_summary">Show the pointer icon when hovering or drawing with the stylus</string>
-
-    <!-- Advanced, Device specific (DeviceParts) settings  -->
-    <string name="advanced_settings_title">Advanced</string>
-    
-    <!-- PERSONALIZATION Settings  -->
-    <!-- Settings main menu category heading. Interface (Launcher, Themes, System). [CHAR LIMIT=40] -->
-    <string name="header_category_interface">Personalization</string>
-    
-    <!-- Themes settings  -->
-    <string name="themes_settings_title">Themes</string>
-
-    <!-- Interface settings  -->
-    <string name="interface_settings_title">Interface</string>
-    <string name="interface_title">Interface</string>
-
 </resources>
