@@ -162,6 +162,9 @@
     <!-- General settings  -->
     <string name="general_settings_title">General UI</string>
 
+    <!-- Power widgets header  -->
+    <string name="power_widgets">Power widgets</string>
+
     <!-- Dual pane settings -->
     <string name="dual_pane">Dual panel mode</string>
     <string name="dual_pane_summary">Restart settings to take effect</string>

@@ -4565,4 +4565,8 @@
     <!-- Themes settings  -->
     <string name="themes_settings_title">Themes</string>
 
+    <!-- Interface settings  -->
+    <string name="interface_settings_title">Interface</string>
+    <string name="interface_title">Interface</string>
+
 </resources>

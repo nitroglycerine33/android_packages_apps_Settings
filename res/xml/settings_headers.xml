@@ -80,6 +80,13 @@
             android:targetClass="com.tmobile.themechooser.ThemeChooser" />
     </header>
 
+    <!-- Powerwidgets -->
+    <header
+        android:id="@+id/interface_settings"
+        android:icon="@drawable/ic_settings_powerwidget"
+        android:fragment="com.android.settings.eclipse.PowerWidget"
+        android:title="@string/power_widgets" />
+
     <!-- DEVICE -->
     <header android:id="@+id/device_section"
         android:title="@string/header_category_device" />
