@@ -94,6 +94,13 @@
         android:fragment="com.android.settings.eclipse.QuickSettings"
         android:title="@string/quick_settings_title" />
 
+    <!-- Lock screen -->
+   <header
+        android:id="@+id/lockscreen_targets"
+	android:icon="@drawable/ic_settings_lockscreen"
+        android:fragment="com.android.settings.eclipse.LockscreenTargets"
+        android:title="@string/lock_screen_title" />
+
     <!-- DEVICE -->
     <header android:id="@+id/device_section"
         android:title="@string/header_category_device" />
