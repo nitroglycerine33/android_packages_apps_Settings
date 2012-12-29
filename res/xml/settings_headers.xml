@@ -113,6 +113,13 @@
         android:fragment="com.android.settings.eclipse.ButtonSettings"
         android:title="@string/button_settings" />
 
+    <!-- Navbar -->
+    <header
+        android:id="@+id/navbar_settings"
+	android:icon="@drawable/ic_settings_navbar"
+        android:fragment="com.android.settings.eclipse.NavbarSettings"
+        android:title="@string/navigation_bar" />
+
     <!-- Powerwidgets -->
     <header
         android:id="@+id/interface_settings"

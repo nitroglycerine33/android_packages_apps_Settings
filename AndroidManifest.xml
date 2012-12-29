@@ -1576,6 +1576,10 @@
         <activity android:name=".eclipse.StatusBar" />
         <activity android:name=".eclipse.PowerWidget" />
         <activity android:name=".eclipse.QuickSettings" />
+        <activity android:name=".eclipse.NavbarSettings" />
+        <activity android:name=".eclipse.NavRingTargets" />
+        <activity android:name=".eclipse.NavbarButtonSettings" />
+        <activity android:name=".eclipse.NavbarStyleDimenSettings" />
 
         <activity android:name="Settings$QuietHoursSettingsActivity"
                 android:label="@string/quiet_hours_title"
