@@ -1085,4 +1085,7 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="battery_text_normal">Battery Color (Above 15%)</string>
     <string name="battery_text_low">Battery Color (Below 15%)</string>
 
+    <!-- TRDS Settings -->
+    <string name="trds_settings_title">Eclipse mode</string>
+
 </resources>
