@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,6 +29,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +43,7 @@ import android.widget.Button;
 public class SettingsPreferenceFragment extends PreferenceFragment implements DialogCreatable {
 
     private static final String TAG = "SettingsPreferenceFragment";
+    protected Context mContext;
 
     private static final int MENU_HELP = Menu.FIRST + 100;
 
@@ -51,7 +54,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        mContext = getActivity();
         // Prepare help url and enable menu if necessary
         int helpResource = getHelpResource();
         if (helpResource != 0) {
@@ -80,6 +83,15 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
      */
     protected int getHelpResource() {
         return 0;
+    }
+
+    public static boolean isTablet(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE,0) == 1;
+    }
+
+    public void setTitle(int resId) {
+        getActivity().setTitle(resId);
     }
 
     @Override
