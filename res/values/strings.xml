@@ -5693,6 +5693,7 @@
     <string name="circle_battery">Circle</string>
     <string name="circle_battery_w_percent">Circle w/ percent</string>
     <string name="circle_dotted_w_percent">Dotted w/ percent</string>
+    <string name="skinny_w_percent">Skinny w/ percent</string>
     <string name="hide">Hide</string>
     <string name="circle_battery_color">Circle color</string>
     <string name="circle_battery_text_color">Circle text color</string>
