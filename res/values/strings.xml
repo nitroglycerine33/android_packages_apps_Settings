@@ -5715,5 +5715,17 @@ rience. Enable at your own discretion.</string>
 
     <!-- TRDS Settings -->
     <string name="trds_settings_title">Eclipse mode</string>
+    
+    <!-- About Strings-->
+    <string name="eclipse_links">Elemental X Site Links</string>
+    <string name="eclipse_site_title">Home Page</string>
+    <string name="eclipse_site_summary">http://www.elementalxdesigns.com</string>
+    <string name="eclipse_source_title">Nitroglycerine33 Twitter</string>
+    <string name="eclipse_source_summary">http://twitter.com/nitroglycerin33</string>
+    <string name="eclipse_team">Elemental Members</string>
+    <string name="eclipse_primary">Elemental Developer</string>
+    <string name="nitro_donate">http://tinyurl.com/cr7etsz</string>
+    <string name="about_eclipse">About Elemental X</string>
+
     <!-- **** ELEMENTAL ADDITIONS END **** -->
 </resources>

@@ -293,4 +293,11 @@
         android:icon="@drawable/ic_settings_about"
         android:title="@string/about_settings" />
 
+    <!-- About Device -->
+    <header
+        android:id="@+id/about_settings_elemental"
+        android:fragment="com.android.settings.About"
+        android:icon="@drawable/ic_elemental_about"
+        android:title="@string/about_eclipse" />
+
 </preference-headers>
