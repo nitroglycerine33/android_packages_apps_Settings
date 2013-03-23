@@ -5712,5 +5712,7 @@
     <string name="battery_bar_animate_summary">The charging animation may result in a poor user expe
 rience. Enable at your own discretion.</string>
 
+    <!-- TRDS Settings -->
+    <string name="trds_settings_title">Eclipse mode</string>
     <!-- **** ELEMENTAL ADDITIONS END **** -->
 </resources>
