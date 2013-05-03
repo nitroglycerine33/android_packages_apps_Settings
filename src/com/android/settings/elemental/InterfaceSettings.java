@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -100,8 +99,6 @@ public class InterfaceSettings extends SettingsPreferenceFragment
     CheckBoxPreference mHideExtras;
     ListPreference mUserModeUI;
     Context mContext;
-
-    Random randomGenerator = new Random();
 
     String mCustomLabelText = null;
 
@@ -184,7 +181,7 @@ public class InterfaceSettings extends SettingsPreferenceFragment
         // hide option if device is already set to never wake up
         if(!mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_unplugTurnsOnScreen)) {
-            ((PreferenceGroup) findPreference("misc")).removePreference(mWakeUpWhenPluggedOrUnplugged);
+            ((PreferenceGroup) findPreference("advanced_options")).removePreference(mWakeUpWhenPluggedOrUnplugged);
         }
 
         mShowWifiName = (CheckBoxPreference) findPreference(PREF_NOTIFICATION_SHOW_WIFI_SSID);
