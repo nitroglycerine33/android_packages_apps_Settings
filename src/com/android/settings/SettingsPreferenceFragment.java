@@ -24,18 +24,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.provider.Settings;
+import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Base class for Settings fragments, with some helper functions and dialog management.
@@ -44,7 +48,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
 
     private static final String TAG = "SettingsPreferenceFragment";
     protected Context mContext;
-
     private static final int MENU_HELP = Menu.FIRST + 100;
 
     private SettingsDialogFragment mDialogFragment;
@@ -54,7 +57,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        mContext = getActivity();
+
         // Prepare help url and enable menu if necessary
         int helpResource = getHelpResource();
         if (helpResource != 0) {
@@ -64,6 +67,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        mContext = getActivity().getApplicationContext();
         super.onActivityCreated(savedInstanceState);
         if (!TextUtils.isEmpty(mHelpUrl)) {
             setHasOptionsMenu(true);
@@ -85,21 +89,16 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
         return 0;
     }
 
-    public static boolean isTablet(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-                Settings.System.CURRENT_UI_MODE,0) == 1;
-    }
-
-    public void setTitle(int resId) {
-        getActivity().setTitle(resId);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (mHelpUrl != null && getActivity() != null) {
             MenuItem helpItem = menu.add(0, MENU_HELP, 0, R.string.help_label);
             HelpUtils.prepareHelpMenuItem(getActivity(), helpItem, mHelpUrl);
         }
+    }
+
+    public void setTitle(int resId) {
+        getActivity().setTitle(resId);
     }
 
     /*
@@ -319,4 +318,21 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Di
         }
     }
 
+    public boolean removePreferenceIfPackageNotInstalled(Preference preference) {
+        String intentUri = ((PreferenceScreen) preference).getIntent().toUri(1);
+        Pattern pattern = Pattern.compile("component=([^/]+)/");
+        Matcher matcher = pattern.matcher(intentUri);
+
+        String packageName = matcher.find() ? matcher.group(1) : null;
+        if (packageName != null) {
+            try {
+                getPackageManager().getPackageInfo(packageName, 0);
+            } catch (NameNotFoundException e) {
+                Log.e(TAG, "package " + packageName + " not installed, hiding preference.");
+                getPreferenceScreen().removePreference(preference);
+                return true;
+            }
+        }
+        return false;
+    }
 }

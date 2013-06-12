@@ -16,6 +16,8 @@
 
 package com.android.settings.profiles;
 
+import static com.android.internal.util.cm.QSUtils.*;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ import android.app.ProfileGroup;
 import android.app.ProfileManager;
 import android.app.RingModeSettings;
 import android.app.StreamSettings;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -90,14 +93,21 @@ public class ProfileConfig extends SettingsPreferenceFragment
         };
 
         mConnections = new ArrayList<ConnectionItem>();
-        mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_MOBILEDATA, getString(R.string.toggleData)));
-        mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_BLUETOOTH, getString(R.string.toggleBluetooth)));
+        if (deviceSupportsBluetooth()) {
+            mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_BLUETOOTH, getString(R.string.toggleBluetooth)));
+        }
         mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_GPS, getString(R.string.toggleGPS)));
         mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_WIFI, getString(R.string.toggleWifi)));
         mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_SYNC, getString(R.string.toggleSync)));
-        mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_WIFIAP, getString(R.string.toggleWifiAp)));
+        if (deviceSupportsMobileData(getActivity())) {
+            mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_MOBILEDATA, getString(R.string.toggleData)));
+            mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_WIFIAP, getString(R.string.toggleWifiAp)));
+        }
         if (WimaxHelper.isWimaxSupported(getActivity())) {
             mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_WIMAX, getString(R.string.toggleWimax)));
+        }
+        if (deviceSupportsNfc(getActivity())) {
+            mConnections.add(new ConnectionItem(ConnectionSettings.PROFILE_CONNECTION_NFC, getString(R.string.toggleNfc)));
         }
 
         addPreferencesFromResource(R.xml.profile_config);
@@ -234,6 +244,13 @@ public class ProfileConfig extends SettingsPreferenceFragment
                     R.array.profile_lockmode_summaries)[mProfile.getScreenLockMode()]);
             mScreenLockModePreference.setValue(String.valueOf(mProfile.getScreenLockMode()));
             mScreenLockModePreference.setOnPreferenceChangeListener(this);
+
+            DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+            if (dpm.requireSecureKeyguard()) {
+                mScreenLockModePreference.setEnabled(false);
+                mScreenLockModePreference.setSummary(R.string.unlock_set_unlock_disabled_summary);
+            }
+
             systemPrefs.addPreference(mScreenLockModePreference);
         }
 

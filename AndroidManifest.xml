@@ -61,9 +61,8 @@
     <uses-permission android:name="android.permission.MANAGE_USERS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SET_TIME" />
-    <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
     <permission
         android:name="android.permission.REQUEST_SUPERUSER"
@@ -99,7 +98,7 @@
         <!-- Only system/su can open this activity -->
         <!-- This activity will then call the MultitaskSuRequestActivity to create a new task stack -->
         <activity
-            android:name="com.koushikdutta.superuser.RequestActivity"
+            android:name=".cyanogenmod.superuser.RequestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/superuser"
             android:launchMode="singleTask"
@@ -112,7 +111,7 @@
         <!-- This is activity is started in multiuser mode when the user invoking su -->
         <!-- is not the device owner (user id 0). -->
         <activity
-            android:name="com.koushikdutta.superuser.NotifyActivity"
+            android:name=".cyanogenmod.superuser.NotifyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/superuser"
             android:launchMode="singleTask"
@@ -124,7 +123,7 @@
 
         <!-- Multiple instances of this activity can be running for multiple su requests -->
         <activity
-            android:name="com.koushikdutta.superuser.MultitaskSuRequestActivity"
+            android:name=".cyanogenmod.superuser.MultitaskSuRequestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -134,7 +133,7 @@
             android:theme="@style/RequestThemeDark" />
 
         <receiver
-            android:name="com.koushikdutta.superuser.SuReceiver"
+            android:name=".cyanogenmod.superuser.SuReceiver"
             android:permission="android.permission.REPORT_SUPERUSER" />
 
         <receiver
@@ -233,17 +232,6 @@
             <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
                 android:resource="@id/wifi_settings" />
         </activity-alias>
-
-        <activity
-            android:name=".elemental.TransparencyDialog"
-            android:theme="@android:style/Theme.Dialog"
-            android:label="@string/interface_title" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="com.android.settings.SHORTCUT" />
-            </intent-filter>
-        </activity>
 
         <activity android:name=".wifi.WifiPickerActivity"
                 android:taskAffinity="com.android.settings"
@@ -512,6 +500,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.VOICE_LAUNCH" />
             </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.LocalePicker" />
+            <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
+                android:resource="@id/language_settings" />
         </activity>
 
         <activity android:name="Settings$InputMethodAndLanguageSettingsActivity"
@@ -536,7 +528,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
-
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                 android:value="com.android.settings.inputmethod.KeyboardLayoutPickerFragment" />
@@ -1533,8 +1524,7 @@
             android:theme="@style/CryptKeeperBlankTheme"
         />
 
-        <!-- Elemental Activities Start -->
-	
+        <!-- CyanogenMod activities Start -->
         <activity android:name="About"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -1545,22 +1535,39 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-	
-        <activity android:name=".elemental.About" />
 
-        <activity android:name=".elemental.PowerWidget" />
+        <activity android:name=".cyanogenmod.PowerWidget" />
 
-        <activity android:name=".elemental.StatusBar" />
+        <activity android:name=".cyanogenmod.SystemSettings" />
+        <activity android:name="Settings$SystemSettingsActivity"
+                android:label="@string/system_settings_title"
+                android:taskAffinity=""
+                android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.cyanogenmod.SystemSettings" />
+            <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
+                android:resource="@id/system_settings" />
+        </activity>
 
-        <activity android:name=".elemental.StatusBarClockStyle" />
+        <activity android:name=".cyanogenmod.PerformanceSettings" />
 
-        <activity android:name=".elemental.StatusBarBattery" />
-
-        <activity android:name=".elemental.PerformanceSettings" />
-
-        <activity android:name=".paranoid.Pie" />
-
-        <activity android:name=".paranoid.PieColor" />
+        <activity android:name="Settings$QuietHoursSettingsActivity"
+                android:label="@string/quiet_hours_title"
+                android:taskAffinity=""
+                android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.cyanogenmod.QuietHours" />
+            <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
+                android:resource="@id/sound_settings" />
+        </activity>
 
         <activity android:name=".profiles.ProfilesSettings" />
         <activity android:name="Settings$ProfilesSettingsActivity"
@@ -1604,52 +1611,28 @@
 
         <activity android:name=".profiles.NFCProfileSelect" />
 
-        <activity
-            android:name=".elemental.DensityChanger"
-            android:label="@string/lcd_density_wizard" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".cyanogenmod.LockscreenTargets" />
 
-        <activity android:name=".elemental.InterfaceSettings" />
+        <activity android:name=".cyanogenmod.ChangeLog" />
 
-        <activity android:name=".elemental.LockscreenTargets" />
+        <activity android:name=".cyanogenmod.LockscreenInterface" />
 
-        <activity android:name=".elemental.LockscreenInterface" />
+        <activity android:name=".cyanogenmod.LockscreenButtons" />
 
-        <activity android:name=".elemental.LockscreenButtons" />
+        <activity android:name=".cyanogenmod.NavigationSettings" />
 
-        <activity android:name=".elemental.LockscreenShortcuts" />
+        <activity android:name=".cyanogenmod.PowerMenu" />
 
-        <activity android:name=".elemental.Navbar" />
+        <activity android:name=".cyanogenmod.QuickSettings" />
 
-        <activity android:name=".elemental.NavRingTargets" />
-
-        <activity android:name=".elemental.PowerMenu" />
-        
-        <activity android:name=".elemental.NotificationDrawerStyle" />
-
-	    <activity android:name=".elemental.RamBar" />
-
-        <activity android:name=".elemental.QuickSettings" />
-
-        <activity android:name="Settings$ASSRamBarActivity"
-                android:label="@string/ram_bar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
-                android:value="com.android.settings.elemental.RamBar" />
-        </activity>
+        <activity android:name=".cyanogenmod.StatusBar" />
 
         <activity android:name=".profiles.NFCProfile"
                 android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="elemental/profile" />
+                <data android:mimeType="cm/profile" />
             </intent-filter>
         </activity>
 
@@ -1659,7 +1642,7 @@
 
         <activity android:name=".ApnEditor" />
 
-        <!-- Elemental Activities End -->
+        <!-- CyanogenMod activities End -->
 
         <!-- Pseudo-activity used to provide an intent-filter entry point to encryption settings -->
         <activity android:name="Settings$CryptKeeperSettingsActivity"
@@ -1667,7 +1650,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.app.action.START_ENCRYPTION" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" /> />
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                 android:value="com.android.settings.CryptKeeperSettings" />
@@ -1707,6 +1690,15 @@
                 android:resource="@id/display_settings" />
         </activity>
 
+
+        <activity android:name=".cyanogenmod.fragments.Navbar"
+            android:label="Navigation Bar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+               <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".widget.SettingsAppWidgetProvider"
                 android:label="@string/gadget_title"
                 android:exported="true"
@@ -1724,43 +1716,16 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info" />
         </receiver>
 
-        <!-- Notification Shortcuts -->
-
-        <activity android:name="Settings$NotificationShortcutsSettingsActivity"
-                android:label="@string/notification_shortcuts_settings_title"
-                android:clearTaskOnLaunch="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.android.settings.elemental.notificationshortcuts.NOTIFICATION_SHORTCUTS" />
-                <action android:name="android.settings.elemental.notificationshortcuts.NOTIFICATION_SHORTCUTS" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.VOICE_LAUNCH" />
-                <category android:name="com.android.settings.SHORTCUT" />
-            </intent-filter>
-            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
-                android:value="com.android.settings.elemental.notificationshortcuts.NotificationShortcuts" />
-            <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
-                android:resource="@id/slim_notification_shortcuts" />
-        </activity>
-
         <activity android:name="net.margaritov.preference.colorpicker" />
-
         <receiver android:name=".bluetooth.BluetoothDiscoverableTimeoutReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.intent.DISCOVERABLE_TIMEOUT" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".elemental.BootReceiver" android:enabled="true">
+        <receiver android:name=".cyanogenmod.BootReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".service.ChangeFastChargeStateReceiver" >
-            <intent-filter>
-                <action android:name="com.android.settings.ACTION_CHANGE_FCHARGE_STATE" />
             </intent-filter>
         </receiver>
 
@@ -1771,9 +1736,5 @@
             </intent-filter>
         </receiver>
 
-        <service 
-            android:name=".service.ExternalCommandService"
-            android:exported="false"/>
     </application>
-
 </manifest>

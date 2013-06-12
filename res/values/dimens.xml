@@ -61,33 +61,4 @@
     <dimen name="keyguard_appwidget_picker_margin_left">6dip</dimen>
     <dimen name="keyguard_appwidget_picker_margin_right">6dip</dimen>
     <integer name="keyguard_appwidget_picker_cols">1</integer>
-
-
-    <!-- **** ELEMENTAL ADDITIONS START **** -->
-
-    <!-- Notification Shortcuts -->
-    <dimen name="notification_shortcut_picker_left_padding">36dip</dimen>
-
-    <!-- Light settings dialog -->
-    <dimen name="dialog_light_settings_width">400dip</dimen>
-
-    <!-- height of a normal list item in edit playlist mode -->
-    <dimen name="normal_height">64dip</dimen>
-    <!-- height of an expanded list item in edit playlist mode -->
-    <dimen name="expanded_height">128dip</dimen>
-
-    <dimen name="navigation_bar_48">48.0dip</dimen>
-    <dimen name="navigation_bar_44">44.0dip</dimen>
-    <dimen name="navigation_bar_42">42.0dip</dimen>
-    <dimen name="navigation_bar_40">40.0dip</dimen>
-    <dimen name="navigation_bar_36">36.0dip</dimen>
-    <dimen name="navigation_bar_30">30.0dip</dimen>
-    <dimen name="navigation_bar_24">24.0dip</dimen>
-    <dimen name="navigation_bar_0">0.0dip</dimen>
-    
-    <!-- Top position of quick contact. If this is -1, the vertical position is determined
-    based on the source of the request -->
-    <dimen name="quick_dev_top_position">48.0dip</dimen>
-
-    <!-- **** ELEMENTAL ADDITIONS END **** -->
 </resources>

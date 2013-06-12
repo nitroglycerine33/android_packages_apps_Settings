@@ -64,6 +64,8 @@ public class SecuritySettings extends SettingsPreferenceFragment
     private static final String KEY_BIOMETRIC_WEAK_LIVELINESS = "biometric_weak_liveliness";
     private static final String KEY_LOCK_ENABLED = "lockenabled";
     private static final String KEY_VISIBLE_PATTERN = "visiblepattern";
+    private static final String KEY_VISIBLE_ERROR_PATTERN = "visible_error_pattern";
+    private static final String KEY_VISIBLE_DOTS = "visibledots";
     private static final String KEY_SECURITY_CATEGORY = "security_category";
     private static final String KEY_DEVICE_ADMIN_CATEGORY = "device_admin_category";
     private static final String KEY_LOCK_AFTER_TIMEOUT = "lock_after_timeout";
@@ -82,7 +84,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
     private static final String KEY_CREDENTIALS_MANAGER = "credentials_management";
     private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
 
-    // Additions
+    // Cyanogenmod Additions
     private static final String SLIDE_LOCK_DELAY_TOGGLE = "slide_lock_delay_toggle";
     private static final String SLIDE_LOCK_TIMEOUT_DELAY = "slide_lock_timeout_delay";
     private static final String SLIDE_LOCK_SCREENOFF_DELAY = "slide_lock_screenoff_delay";
@@ -100,6 +102,8 @@ public class SecuritySettings extends SettingsPreferenceFragment
 
     private CheckBoxPreference mBiometricWeakLiveliness;
     private CheckBoxPreference mVisiblePattern;
+    private CheckBoxPreference mVisibleErrorPattern;
+    private CheckBoxPreference mVisibleDots;
 
     private CheckBoxPreference mShowPassword;
 
@@ -112,7 +116,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
 
     private boolean mIsPrimary;
 
-    // Additions
+    // Cyanogenmod Additions
     private CheckBoxPreference mSlideLockDelayToggle;
     private ListPreference mSlideLockTimeoutDelay;
     private ListPreference mSlideLockScreenOffDelay;
@@ -141,11 +145,11 @@ public class SecuritySettings extends SettingsPreferenceFragment
         addPreferencesFromResource(R.xml.security_settings);
         root = getPreferenceScreen();
 
-        // allows for calling the settings screen with stock or liquid view
-        boolean isLsSecurity = false;
+        // CM - allows for calling the settings screen with stock or cm view
+        boolean isCmSecurity = false;
         Bundle args = getArguments();
         if (args != null) {
-            isLsSecurity = args.getBoolean("liquid_security");
+            isCmSecurity = args.getBoolean("cm_security");
         }
         ContentResolver resolver = getActivity().getApplicationContext().getContentResolver();
 
@@ -200,7 +204,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
             }
         }
 
-        if (mIsPrimary && !isLsSecurity) {
+        if (mIsPrimary && !isCmSecurity) {
             switch (dpm.getStorageEncryptionStatus()) {
             case DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE:
                 // The device is currently encrypted.
@@ -218,8 +222,8 @@ public class SecuritySettings extends SettingsPreferenceFragment
         if (mLockAfter != null) {
             setupLockAfterPreference();
             updateLockAfterPreferenceSummary();
-        } else if (!mLockPatternUtils.isLockScreenDisabled() && isLsSecurity) {
-            addPreferencesFromResource(R.xml.security_settings_slide_delay_liquid);
+        } else if (!mLockPatternUtils.isLockScreenDisabled() && isCmSecurity) {
+            addPreferencesFromResource(R.xml.security_settings_slide_delay_cyanogenmod);
 
             mSlideLockDelayToggle = (CheckBoxPreference) root
                     .findPreference(SLIDE_LOCK_DELAY_TOGGLE);
@@ -243,17 +247,14 @@ public class SecuritySettings extends SettingsPreferenceFragment
             mSlideLockScreenOffDelay.setOnPreferenceChangeListener(this);
         }
 
-        if (isLsSecurity) {
-            // visible pattern
-            mVisiblePattern = (CheckBoxPreference) root.findPreference(KEY_VISIBLE_PATTERN);
-
+        if (isCmSecurity) {
             // lock instantly on power key press
             mPowerButtonInstantlyLocks = (CheckBoxPreference) root.findPreference(
                     KEY_POWER_INSTANTLY_LOCKS);
             checkPowerInstantLockDependency();
 
-            // Add the additional LiquidSmooth settings
-            addPreferencesFromResource(R.xml.security_settings_liquid);
+            // Add the additional CyanogenMod settings
+            addPreferencesFromResource(R.xml.security_settings_cyanogenmod);
 
             // Quick Unlock Screen Control
             mQuickUnlockScreen = (CheckBoxPreference) root
@@ -317,6 +318,12 @@ public class SecuritySettings extends SettingsPreferenceFragment
         // visible pattern
         mVisiblePattern = (CheckBoxPreference) root.findPreference(KEY_VISIBLE_PATTERN);
 
+        // visible error pattern
+        mVisibleErrorPattern = (CheckBoxPreference) root.findPreference(KEY_VISIBLE_ERROR_PATTERN);
+
+        // visible dots
+        mVisibleDots = (CheckBoxPreference) root.findPreference(KEY_VISIBLE_DOTS);
+
         // lock instantly on power key press
         mPowerButtonInstantlyLocks = (CheckBoxPreference) root.findPreference(
                 KEY_POWER_INSTANTLY_LOCKS);
@@ -327,13 +334,16 @@ public class SecuritySettings extends SettingsPreferenceFragment
                 DevicePolicyManager.PASSWORD_QUALITY_SOMETHING) {
             PreferenceGroup securityCategory = (PreferenceGroup)
                     root.findPreference(KEY_SECURITY_CATEGORY);
-            if (securityCategory != null && mVisiblePattern != null) {
-                securityCategory.removePreference(root.findPreference(KEY_VISIBLE_PATTERN));
+            if (securityCategory != null && mVisiblePattern != null &&
+                    mVisibleErrorPattern != null && mVisibleDots != null) {
+                securityCategory.removePreference(mVisiblePattern);
+                securityCategory.removePreference(mVisibleErrorPattern);
+                securityCategory.removePreference(mVisibleDots);
             }
         }
 
         // Append the rest of the settings
-        if (!isLsSecurity) {
+        if (!isCmSecurity) {
             addPreferencesFromResource(R.xml.security_settings_misc);
 
             // Do not display SIM lock for devices without an Icc card
@@ -385,7 +395,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
 
             boolean isTelephony = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
             if (isTelephony) {
-                addPreferencesFromResource(R.xml.security_settings_app_liquid);
+                addPreferencesFromResource(R.xml.security_settings_app_cyanogenmod);
                 mSmsSecurityCheck = (ListPreference) root.findPreference(KEY_SMS_SECURITY_CHECK_PREF);
                 mSmsSecurityCheck.setOnPreferenceChangeListener(this);
                 int smsSecurityCheck = Integer.valueOf(mSmsSecurityCheck.getValue());
@@ -393,7 +403,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
             }
          }
 
-         return root;
+        return root;
     }
 
     private boolean isNonMarketAppsAllowed() {
@@ -583,6 +593,12 @@ public class SecuritySettings extends SettingsPreferenceFragment
         if (mVisiblePattern != null) {
             mVisiblePattern.setChecked(lockPatternUtils.isVisiblePatternEnabled());
         }
+        if (mVisibleErrorPattern != null) {
+            mVisibleErrorPattern.setChecked(lockPatternUtils.isShowErrorPath());
+        }
+        if (mVisibleDots != null) {
+            mVisibleDots.setChecked(lockPatternUtils.isVisibleDotsEnabled());
+        }
         if (mPowerButtonInstantlyLocks != null) {
             mPowerButtonInstantlyLocks.setChecked(lockPatternUtils.getPowerButtonInstantlyLocks());
         }
@@ -641,6 +657,10 @@ public class SecuritySettings extends SettingsPreferenceFragment
             lockPatternUtils.setLockPatternEnabled(isToggled(preference));
         } else if (KEY_VISIBLE_PATTERN.equals(key)) {
             lockPatternUtils.setVisiblePatternEnabled(isToggled(preference));
+        } else if (KEY_VISIBLE_ERROR_PATTERN.equals(key)) {
+            lockPatternUtils.setShowErrorPath(isToggled(preference));
+        } else if (KEY_VISIBLE_DOTS.equals(key)) {
+            lockPatternUtils.setVisibleDotsEnabled(isToggled(preference));
         } else if (KEY_POWER_INSTANTLY_LOCKS.equals(key)) {
             lockPatternUtils.setPowerButtonInstantlyLocks(isToggled(preference));
         } else if (preference == mSlideLockDelayToggle) {

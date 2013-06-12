@@ -39,6 +39,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WpsInfo;
+import android.net.wifi.WifiChannel;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -100,8 +101,7 @@ public class WifiSettings extends SettingsPreferenceFragment
     private static final int MENU_ID_SCAN = Menu.FIRST + 5;
     private static final int MENU_ID_CONNECT = Menu.FIRST + 6;
     private static final int MENU_ID_FORGET = Menu.FIRST + 7;
-    private static final int MENU_ID_FORGET_ALL = Menu.FIRST + 8;
-    private static final int MENU_ID_MODIFY = Menu.FIRST + 9;
+    private static final int MENU_ID_MODIFY = Menu.FIRST + 8;
 
     private static final int WIFI_DIALOG_ID = 1;
     private static final int WPS_PBC_DIALOG_ID = 2;
@@ -125,7 +125,9 @@ public class WifiSettings extends SettingsPreferenceFragment
     private WifiManager.ActionListener mSaveListener;
     private WifiManager.ActionListener mForgetListener;
     private boolean mP2pSupported;
+    private boolean mIbssSupported;
 
+    List<WifiChannel> mSupportedChannels;
 
     private WifiEnabler mWifiEnabler;
     // An access point being editted is stored here.
@@ -460,9 +462,6 @@ public class WifiSettings extends SettingsPreferenceFragment
             menu.add(Menu.NONE, MENU_ID_WPS_PIN, 0, R.string.wifi_menu_wps_pin)
                     .setEnabled(wifiIsEnabled)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            menu.add(Menu.NONE, MENU_ID_FORGET_ALL, 0, R.string.wifi_menu_forget_all)
-                    .setEnabled(wifiIsEnabled)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             if (mP2pSupported) {
                 menu.add(Menu.NONE, MENU_ID_P2P, 0, R.string.wifi_menu_p2p)
                         .setEnabled(wifiIsEnabled)
@@ -519,9 +518,6 @@ public class WifiSettings extends SettingsPreferenceFragment
                 if (mWifiManager.isWifiEnabled()) {
                     onAddNetworkPressed();
                 }
-                return true;
-            case MENU_ID_FORGET_ALL:
-                forgetAll();
                 return true;
             case MENU_ID_ADVANCED:
                 if (getActivity() instanceof PreferenceActivity) {
@@ -599,7 +595,8 @@ public class WifiSettings extends SettingsPreferenceFragment
             mSelectedAccessPoint = (AccessPoint) preference;
             /** Bypass dialog for unsecured, unsaved networks */
             if (mSelectedAccessPoint.security == AccessPoint.SECURITY_NONE &&
-                    mSelectedAccessPoint.networkId == INVALID_NETWORK_ID) {
+                    mSelectedAccessPoint.networkId == INVALID_NETWORK_ID &&
+                    !mSelectedAccessPoint.isIBSS) {
                 mSelectedAccessPoint.generateOpenNetworkConfig();
                 mWifiManager.connect(mSelectedAccessPoint.getConfig(), mConnectListener);
             } else {
@@ -638,7 +635,7 @@ public class WifiSettings extends SettingsPreferenceFragment
                 }
                 // If it's still null, fine, it's for Add Network
                 mSelectedAccessPoint = ap;
-                mDialog = new WifiDialog(getActivity(), this, ap, mDlgEdit);
+                mDialog = new WifiDialog(getActivity(), this, ap, mDlgEdit, mIbssSupported, mSupportedChannels);
                 return mDialog;
             case WPS_PBC_DIALOG_ID:
                 return new WpsDialog(getActivity(), WpsInfo.PBC);
@@ -779,9 +776,13 @@ public class WifiSettings extends SettingsPreferenceFragment
         final List<ScanResult> results = mWifiManager.getScanResults();
         if (results != null) {
             for (ScanResult result : results) {
-                // Ignore hidden and ad-hoc networks.
-                if (result.SSID == null || result.SSID.length() == 0 ||
-                        result.capabilities.contains("[IBSS]")) {
+                // Ignore hidden networks.
+                if (result.SSID == null || result.SSID.length() == 0) {
+                    continue;
+                }
+
+                // Ignore IBSS if chipset does not support them
+                if (!mIbssSupported && result.capabilities.contains("[IBSS]")) {
                     continue;
                 }
 
@@ -899,6 +900,10 @@ public class WifiSettings extends SettingsPreferenceFragment
 
         switch (state) {
             case WifiManager.WIFI_STATE_ENABLED:
+                // this function only returns valid results in enabled state
+                mIbssSupported = mWifiManager.isIbssSupported();
+                mSupportedChannels = mWifiManager.getSupportedChannels();
+
                 mScanner.resume();
                 return; // not break, to avoid the call to pause() below
 
@@ -1017,22 +1022,6 @@ public class WifiSettings extends SettingsPreferenceFragment
 
         // We need to rename/replace "Next" button in wifi setup context.
         changeNextButtonState(false);
-    }
-
-    private void forgetAll() {
-        List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
-        if (configs != null) {
-            for (int i=0; i<configs.size(); i++) {
-                mWifiManager.removeNetwork(i);
-            }
-            if (mWifiManager.isWifiEnabled()) {
-                mScanner.resume();
-            }
-            updateAccessPoints();
-
-            // We need to rename/replace "Next" button in wifi setup context.
-            changeNextButtonState(false);
-        }
     }
 
     /**

@@ -46,7 +46,7 @@ public class NFCProfile extends Activity {
 
     private static final String PREFS_PREVIOUS_PROFILE = "previous-profile";
 
-    static final String PROFILE_MIME_TYPE = "liquid/profile";
+    static final String PROFILE_MIME_TYPE = "cm/profile";
 
     private ProfileManager mProfileManager;
 

@@ -61,9 +61,11 @@ public class InputMethodAndLanguageSettings extends SettingsPreferenceFragment
     private static final String KEY_INPUT_METHOD_SELECTOR = "input_method_selector";
     private static final String KEY_USER_DICTIONARY_SETTINGS = "key_user_dictionary_settings";
     private static final String KEY_IME_SWITCHER = "status_bar_ime_switcher";
-    private static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
+    private static final String KEY_VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
+    private static final String KEY_POINTER_SETTINGS_CATEGORY = "pointer_settings_category";
     private static final String KEY_STYLUS_ICON_ENABLED = "stylus_icon_enabled";
     private static final String KEY_STYLUS_GESTURES = "stylus_gestures";
+
     // false: on ICS or later
     private static final boolean SHOW_INPUT_METHOD_SWITCHER_SETTINGS = false;
 
@@ -83,6 +85,7 @@ public class InputMethodAndLanguageSettings extends SettingsPreferenceFragment
     private PreferenceCategory mHardKeyboardCategory;
     private PreferenceCategory mGameControllerCategory;
     private Preference mLanguagePref;
+    private PreferenceScreen mStylusGestures;
     private final ArrayList<InputMethodPreference> mInputMethodPreferenceList =
             new ArrayList<InputMethodPreference>();
     private final ArrayList<PreferenceScreen> mHardKeyboardPreferenceList =
@@ -176,13 +179,27 @@ public class InputMethodAndLanguageSettings extends SettingsPreferenceFragment
         mIm = (InputManager)getActivity().getSystemService(Context.INPUT_SERVICE);
         updateInputDevices();
 
-        // Enable or disable mStatusBarImeSwitcher
+        // Enable or disable mStatusBarImeSwitcher based on boolean value: config_show_cmIMESwitcher
         final Preference keyImeSwitcherPref = findPreference(KEY_IME_SWITCHER);
         if (keyImeSwitcherPref != null) {
-            mStatusBarImeSwitcher = (CheckBoxPreference) keyImeSwitcherPref;
+            if (!getResources().getBoolean(com.android.internal.R.bool.config_show_cmIMESwitcher)) {
+                getPreferenceScreen().removePreference(keyImeSwitcherPref);
+            } else {
+                mStatusBarImeSwitcher = (CheckBoxPreference) keyImeSwitcherPref;
+            }
         }
 
+        mStylusGestures = (PreferenceScreen) findPreference(KEY_STYLUS_GESTURES);
         mStylusIconEnabled = (CheckBoxPreference) findPreference(KEY_STYLUS_ICON_ENABLED);
+        // remove stylus preference for non stylus devices
+        if (!getResources().getBoolean(com.android.internal.R.bool.config_stylusGestures)) {
+            PreferenceCategory pointerSettingsCategory = (PreferenceCategory)
+                    findPreference(KEY_POINTER_SETTINGS_CATEGORY);
+            if (pointerSettingsCategory != null) {
+                pointerSettingsCategory.removePreference(mStylusGestures);
+                pointerSettingsCategory.removePreference(mStylusIconEnabled);
+            }
+        }
 
         // Spell Checker
         final Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -193,22 +210,20 @@ public class InputMethodAndLanguageSettings extends SettingsPreferenceFragment
             scp.setFragmentIntent(this, intent);
         }
 
-        mVolumeKeyCursorControl = (ListPreference) findPreference(VOLUME_KEY_CURSOR_CONTROL);
+        mVolumeKeyCursorControl = (ListPreference) findPreference(KEY_VOLUME_KEY_CURSOR_CONTROL);
         if(mVolumeKeyCursorControl != null) {
-            mVolumeKeyCursorControl.setOnPreferenceChangeListener(this);
-            mVolumeKeyCursorControl.setValue(Integer.toString(Settings.System.getInt(getActivity()
-                    .getContentResolver(), Settings.System.VOLUME_KEY_CURSOR_CONTROL, 0)));
-            mVolumeKeyCursorControl.setSummary(mVolumeKeyCursorControl.getEntry());
+            if (Utils.hasVolumeRocker(getActivity())) {
+                mVolumeKeyCursorControl.setOnPreferenceChangeListener(this);
+                mVolumeKeyCursorControl.setValue(Integer.toString(Settings.System.getInt(getActivity()
+                        .getContentResolver(), Settings.System.VOLUME_KEY_CURSOR_CONTROL, 0)));
+                mVolumeKeyCursorControl.setSummary(mVolumeKeyCursorControl.getEntry());
+            } else {
+                getPreferenceScreen().removePreference(mVolumeKeyCursorControl);
+            }
         }
 
         mHandler = new Handler();
         mSettingsObserver = new SettingsObserver(mHandler, getActivity());
-        // remove stylus preference for non stylus devices
-        if (!hasStylus()) {
-            getPreferenceScreen().removePreference(
-                    findPreference(KEY_STYLUS_GESTURES));
-        }
-
     }
 
     private void updateInputMethodSelectorSummary(int value) {
@@ -616,11 +631,5 @@ public class InputMethodAndLanguageSettings extends SettingsPreferenceFragment
         public void pause() {
             mContext.getContentResolver().unregisterContentObserver(this);
         }
-    }
-
-    // returns whether the device has stylus or not
-    private boolean hasStylus() {
-        return getResources().getBoolean(
-                com.android.internal.R.bool.config_stylusGestures);
     }
 }

@@ -30,7 +30,7 @@
 
         <PreferenceScreen
             android:key="display_rotation"
-            android:fragment="com.android.settings.elemental.DisplayRotation"
+            android:fragment="com.android.settings.cyanogenmod.DisplayRotation"
             android:title="@string/display_rotation_title" />
 
         <ListPreference
@@ -53,16 +53,6 @@
                 android:entries="@array/entries_font_size"
                 android:entryValues="@array/entryvalues_font_size"
                 android:dialogTitle="@string/dialog_title_font_size" />
-
-        <PreferenceScreen
-            android:key="battery_light"
-            android:title="@string/battery_light_title"
-            android:fragment="com.android.settings.notificationlight.BatteryLightSettings" />
-
-        <PreferenceScreen
-            android:key="notification_pulse"
-            android:title="@string/notification_pulse_title"
-            android:fragment="com.android.settings.notificationlight.NotificationLightSettings" />
 
         <PreferenceScreen
                 android:key="wifi_display"
