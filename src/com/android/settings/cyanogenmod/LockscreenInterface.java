@@ -65,10 +65,12 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
     private static final String KEY_SCREEN_SECURITY = "screen_security";
     private static final String PREF_LOCKSCREEN_AUTO_ROTATE = "lockscreen_auto_rotate";
     private static final String PREF_LOCKSCREEN_TEXT_COLOR = "lockscreen_text_color";
+    private static final String KEY_LOCKSCREEN_HIDE_HINTS = "lockscreen_hide_hints";
 
     private ListPreference mCustomBackground;
     private ListPreference mBatteryStatus;
     private CheckBoxPreference mMaximizeWidgets;
+    private CheckBoxPreference mLockscreenHideHints;
 
     ColorPickerPreference mLockscreenTextColor;
     CheckBoxPreference mLockscreenAutoRotate;
@@ -99,8 +101,17 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
                 mMaximizeWidgets.setOnPreferenceChangeListener(this);
             }
 
+            mLockscreenHideHints = (CheckBoxPreference)findPreference(KEY_LOCKSCREEN_HIDE_HINTS);
+            if (!Utils.isPhone(getActivity())) {
+                getPreferenceScreen().removePreference(mLockscreenHideHints);
+                mLockscreenHideHints = null;
+            } else {
+                mLockscreenHideHints.setOnPreferenceChangeListener(this);
+            }
+
         mLockscreenTextColor = (ColorPickerPreference) findPreference(PREF_LOCKSCREEN_TEXT_COLOR);
         mLockscreenTextColor.setOnPreferenceChangeListener(this);
+
             PreferenceScreen lockscreenButtons = (PreferenceScreen) findPreference(KEY_LOCKSCREEN_BUTTONS);
             if (!hasButtons()) {
                 getPreferenceScreen().removePreference(lockscreenButtons);
@@ -150,6 +161,11 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
             mMaximizeWidgets.setChecked(Settings.System.getInt(cr,
                     Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0) == 1);
         }
+
+        if (mLockscreenHideHints != null) {
+            mLockscreenHideHints.setChecked(Settings.System.getInt(cr,
+                    Settings.System.LOCKSCREEN_HIDE_HINTS, 0) == 1);
+        }
     }
 
     @Override
@@ -192,6 +208,10 @@ public class LockscreenInterface extends SettingsPreferenceFragment implements
             preference.setSummary(hex);
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(cr, Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, intHex);
+            return true;
+        }  else if (preference == mLockscreenHideHints) {
+            boolean value = (Boolean) objValue;
+            Settings.System.putInt(cr, Settings.System.LOCKSCREEN_HIDE_HINTS, value ? 1 : 0);
             return true;
         } else if (preference == mMaximizeWidgets) {
             boolean value = (Boolean) objValue;

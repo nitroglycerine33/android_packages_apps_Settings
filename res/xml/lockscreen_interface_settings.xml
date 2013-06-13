@@ -56,12 +56,6 @@
                 android:targetClass="com.cyanogenmod.lockclock.preference.Preferences" />
     </PreferenceScreen>
 
-     <CheckBoxPreference
-        android:key="lockscreen_maximize_widgets"
-        android:persistent="false"
-        android:title="@string/lockscreen_maximize_widgets_title"
-        android:summary="@string/lockscreen_maximize_widgets_summary" />
-
      <Preference
         android:fragment="com.android.settings.cyanogenmod.LockscreenTargets"
         android:key="lockscreen_targets"
@@ -73,5 +67,16 @@
         android:key="lockscreen_buttons"
         android:title="@string/lockscreen_buttons_title"
         android:summary="@string/lockscreen_buttons_summary" />
+
+     <CheckBoxPreference
+        android:key="lockscreen_maximize_widgets"
+        android:persistent="false"
+        android:title="@string/lockscreen_maximize_widgets_title"
+        android:summary="@string/lockscreen_maximize_widgets_summary" />
+
+    <CheckBoxPreference
+        android:key="lockscreen_hide_hints"
+        android:title="@string/lockscreen_hide_hints_title"
+        android:summary="@string/lockscreen_hide_hints_summary" />
 
 </PreferenceScreen>

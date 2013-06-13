@@ -197,6 +197,8 @@
     <string name="lockscreen_auto_rotate_title">Allow lockscreen rotation</string>
     <string name="lockscreen_auto_rotate_summary">Lockscreen will have ability to rotate via device orientation. This is independent of Auto-rotation in display</string>
     <string name="lockscreen_text_color_title">Lockscreen text color</string>
+    <string name="lockscreen_hide_hints_title">Hide hints</string>
+    <string name="lockscreen_hide_hints_summary">If checked hides the widgets\' hints when the screen is turned on (portrait mode only).</string>
 
     <!-- Profiles settings  -->
     <string name="profiles_settings_title">Profiles</string>
