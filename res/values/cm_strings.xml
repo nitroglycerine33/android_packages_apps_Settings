@@ -1048,6 +1048,10 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="privacy_guard_default_title">Privacy Guard</string>
     <string name="privacy_guard_default_summary">Enable Privacy Guard by default for newly-installed apps</string>
 
+    <!-- Permissions Manager -->
+    <string name="permissions_manager_title">Permissions Manager</string>
+    <string name="permissions_settings_summary">Revoke permissions from an app. May cause app instability.</string>
+
     <!-- Statusbar | Battery -->
     <string name="battery_icon">Battery icon style</string>
     <string name="battery_not_title">Battery icon in notifications</string>

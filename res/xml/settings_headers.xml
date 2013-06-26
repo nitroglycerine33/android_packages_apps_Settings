@@ -227,6 +227,17 @@
         android:title="@string/security_settings_title"
         android:id="@+id/security_settings" />
 
+    <!-- Permissions Management -->
+    <header
+        android:id="@+id/permissions_settings"
+        android:icon="@drawable/ic_eclipse_permissions"
+        android:title="@string/permissions_manager_title">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetPackage="org.chameleonos.permissionsmanager"
+            android:targetClass="org.chameleonos.permissionsmanager.activity.PermissionManagerActivity" />
+    </header>
+
     <!-- Language -->
     <header
         android:id="@+id/language_settings"
