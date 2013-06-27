@@ -17,7 +17,6 @@
 package com.android.settings.cyanogenmod;
 
 import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
-import static com.android.internal.util.cm.QSConstants.TILE_CAMERA;
 import static com.android.internal.util.cm.QSConstants.TILE_MOBILEDATA;
 import static com.android.internal.util.cm.QSConstants.TILE_NETWORKMODE;
 import static com.android.internal.util.cm.QSConstants.TILE_NFC;
@@ -26,6 +25,16 @@ import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.cm.QSConstants.TILE_LTE;
 import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
 import static com.android.internal.util.cm.QSConstants.TILE_EXPANDEDDESKTOP;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsBluetooth;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsDockBattery;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsImeSwitcher;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsLte;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsMobileData;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsNfc;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsUsbTether;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsWifiDisplay;
+import static com.android.internal.util.cm.QSUtils.systemProfilesEnabled;
+import static com.android.internal.util.cm.QSUtils.expandedDesktopEnabled;
 
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
@@ -43,7 +52,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.Phone;
-import com.android.internal.util.cm.QSUtils;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
@@ -149,7 +157,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         mDynamicBugReport.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_BUGREPORT, 1) == 1);
         mDynamicDockBattery = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_DOCK_BATTERY);
         if (mDynamicDockBattery != null) {
-            if (QSUtils.deviceSupportsDockBattery(getActivity())) {
+            if (deviceSupportsDockBattery(getActivity())) {
                 mDynamicDockBattery.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_DOCK_BATTERY, 1) == 1);
             } else {
                 mDynamicTiles.removePreference(mDynamicDockBattery);
@@ -158,7 +166,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         }
         mDynamicIme = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_IME);
         if (mDynamicIme != null) {
-            if (QSUtils.deviceSupportsImeSwitcher(getActivity())) {
+            if (deviceSupportsImeSwitcher(getActivity())) {
                 mDynamicIme.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_IME, 1) == 1);
             } else {
                 mDynamicTiles.removePreference(mDynamicIme);
@@ -167,7 +175,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         }
         mDynamicUsbTether = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_USBTETHER);
         if (mDynamicUsbTether != null) {
-            if (QSUtils.deviceSupportsUsbTether(getActivity())) {
+            if (deviceSupportsUsbTether(getActivity())) {
                 mDynamicUsbTether.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER, 1) == 1);
             } else {
                 mDynamicTiles.removePreference(mDynamicUsbTether);
@@ -176,7 +184,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         }
         mDynamicWifi = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_WIFI);
         if (mDynamicWifi != null) {
-            if (QSUtils.deviceSupportsWifiDisplay(getActivity())) {
+            if (deviceSupportsWifiDisplay(getActivity())) {
                 mDynamicWifi.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_WIFI, 1) == 1);
             } else {
                 mDynamicTiles.removePreference(mDynamicWifi);
@@ -185,7 +193,7 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         }
 
         // Don't show mobile data options if not supported
-        if (!QSUtils.deviceSupportsMobileData(getActivity())) {
+        if (!deviceSupportsMobileData(getActivity())) {
             QuickSettingsUtil.TILES.remove(TILE_MOBILEDATA);
             QuickSettingsUtil.TILES.remove(TILE_WIFIAP);
             QuickSettingsUtil.TILES.remove(TILE_NETWORKMODE);
@@ -218,22 +226,22 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         }
 
         // Don't show the bluetooth options if not supported
-        if (!QSUtils.deviceSupportsBluetooth()) {
+        if (!deviceSupportsBluetooth()) {
             QuickSettingsUtil.TILES.remove(TILE_BLUETOOTH);
         }
 
         // Don't show the profiles tile if profiles are disabled
-        if (!QSUtils.systemProfilesEnabled(resolver)) {
+        if (!systemProfilesEnabled(resolver)) {
             QuickSettingsUtil.TILES.remove(TILE_PROFILE);
         }
 
         // Don't show the NFC tile if not supported
-        if (!QSUtils.deviceSupportsNfc(getActivity())) {
+        if (!deviceSupportsNfc(getActivity())) {
             QuickSettingsUtil.TILES.remove(TILE_NFC);
         }
 
         // Don't show the LTE tile if not supported
-        if (!QSUtils.deviceSupportsLte(getActivity())) {
+        if (!deviceSupportsLte(getActivity())) {
             QuickSettingsUtil.TILES.remove(TILE_LTE);
         }
 
@@ -243,13 +251,8 @@ public class QuickSettings extends SettingsPreferenceFragment implements OnPrefe
         }
 
         // Don't show the Expanded desktop tile if expanded desktop is disabled
-        if (!QSUtils.expandedDesktopEnabled(resolver)) {
+        if (!expandedDesktopEnabled(resolver)) {
             QuickSettingsUtil.TILES.remove(TILE_EXPANDEDDESKTOP);
-        }
-
-        // Don't show the Camera tile if the device has no cameras
-        if (!QSUtils.deviceSupportsCamera()) {
-            QuickSettingsUtil.TILES.remove(TILE_CAMERA);
         }
     }
 
