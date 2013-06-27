@@ -47,6 +47,7 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
     private static final String PREF_BATT_BAR_COLOR = "battery_bar_color";
     private static final String PREF_BATT_BAR_WIDTH = "battery_bar_thickness";
     private static final String PREF_BATT_ANIMATE = "battery_bar_animate";
+    private static final String BATTERY_TEXT = "battery_text";
 
     private ListPreference mClockStyle;
     private ListPreference mClockAmPmstyle;
@@ -61,6 +62,7 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
     private CheckBoxPreference mBatteryBarChargingAnimation;
     private PreferenceCategory mPrefCategoryGeneral;
     private ColorPickerPreference mBatteryBarColor;
+    private CheckBoxPreference mBattText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,10 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
         mStatusBarBrightnessControl = (CheckBoxPreference) prefSet.findPreference(STATUS_BAR_BRIGHTNESS_CONTROL);
         mStatusBarBattery = (ListPreference) prefSet.findPreference(STATUS_BAR_BATTERY);
         mStatusBarCmSignal = (ListPreference) prefSet.findPreference(STATUS_BAR_SIGNAL);
+	
+	mBattText = (CheckBoxPreference) prefSet.findPreference(BATTERY_TEXT);
+	mBattText.setChecked(Settings.System.getInt(getContentResolver(),
+		Settings.System.BATTERY_TEXT, 0) == 1);
 
         mStatusBarBrightnessControl.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                 Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1));
@@ -237,9 +243,13 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
                     Settings.System.STATUS_BAR_NOTIF_COUNT, value ? 1 : 0);
             return true;
         } else if (preference == mBatteryBarChargingAnimation) {
-
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE,
+                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;
+	} else if (preference == mBattText) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.BATTERY_TEXT,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
             return true;
         }
