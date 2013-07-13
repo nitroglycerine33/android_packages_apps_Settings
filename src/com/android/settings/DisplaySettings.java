@@ -187,13 +187,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             getPreferenceScreen().removePreference(wakeupCategory);
         }
 
-        mScreenOffAnimation = (CheckBoxPreference) findPreference(KEY_SCREEN_OFF_ANIMATION);
-        if (res.getBoolean(com.android.internal.R.bool.config_screenOffAnimation)) {
-            mScreenOffAnimation.setChecked(Settings.System.getInt(resolver,
-                    Settings.System.SCREEN_OFF_ANIMATION, 1) == 1);
-        } else {
-            getPreferenceScreen().removePreference(mScreenOffAnimation);
-        }
     }
 
     private void updateDisplayRotationPreferenceDescription() {
