@@ -86,6 +86,13 @@
         android:icon="@drawable/ic_settings_powerwidget"
         android:fragment="com.android.settings.eclipse.PowerWidget"
         android:title="@string/power_widgets" />
+	
+    <!-- Quicksettings -->
+    <header
+        android:id="@+id/quicksettings_settings"
+	android:icon="@drawable/ic_settings_quicksettings"
+        android:fragment="com.android.settings.eclipse.QuickSettings"
+        android:title="@string/quick_settings_title" />
 
     <!-- DEVICE -->
     <header android:id="@+id/device_section"

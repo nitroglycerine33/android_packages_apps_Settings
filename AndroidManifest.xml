@@ -1575,6 +1575,7 @@
         <!-- Eclipse activities Start -->
         <activity android:name=".eclipse.StatusBar" />
         <activity android:name=".eclipse.PowerWidget" />
+        <activity android:name=".eclipse.QuickSettings" />
         <!-- Eclipse activities End -->
 
         <!-- Pseudo-activity used to provide an intent-filter entry point to encryption settings -->
