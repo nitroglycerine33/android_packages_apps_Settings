@@ -99,7 +99,7 @@
 	android:id="@+id/navbar"
 	android:icon="@drawable/ic_eclipse_navbar"
 	android:fragment="com.android.settings.eclipse.fragments.Navbar" />
-	android:title="@string/navigation_bar_header"
+	android:title="@string/navigation_bar_title"
 
     <!-- DEVICE -->
     <header android:id="@+id/device_section"
