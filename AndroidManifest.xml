@@ -1576,6 +1576,15 @@
         <activity android:name=".eclipse.StatusBar" />
         <activity android:name=".eclipse.PowerWidget" />
         <activity android:name=".eclipse.QuickSettings" />
+	
+        <activity android:name=".eclipse.fragments.Navbar"
+            android:label="Navigation Bar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+               <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Eclipse activities End -->
 
         <!-- Pseudo-activity used to provide an intent-filter entry point to encryption settings -->
