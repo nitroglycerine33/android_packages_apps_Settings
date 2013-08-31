@@ -1577,6 +1577,8 @@
         <activity android:name=".eclipse.PowerWidget" />
         <activity android:name=".eclipse.QuickSettings" />
         <activity android:name=".eclipse.LockscreenTargets" />
+        <activity android:name=".eclipse.ButtonSettings" />
+
         <!-- Eclipse activities End -->
 
         <!-- Pseudo-activity used to provide an intent-filter entry point to encryption settings -->

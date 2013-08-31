@@ -29,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
@@ -686,4 +687,10 @@ public class Utils {
     public static boolean isTablet(Context con) {
         return getScreenType(con) == DEVICE_TABLET;
     }
+
+    /* returns whether the device has volume rocker or not. */
+    public static boolean hasVolumeRocker(Context con) {
+        return con.getResources().getBoolean(R.bool.has_volume_rocker);
+    }
+
 }
