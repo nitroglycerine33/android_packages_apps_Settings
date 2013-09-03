@@ -1260,5 +1260,8 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="profile_lockmode_insecure_summary">Use insecure lock screen</string>
     <string name="profile_lockmode_disabled_summary">Lock screen is disabled</string>
     <string name="profile_airplanemode_title">Airplane mode</string>
+    
+    <!-- Homescreen settings  -->
+    <string name="homescreen_settings_title">Home screen</string>
 
 </resources>

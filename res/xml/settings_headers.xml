@@ -86,6 +86,33 @@
             android:targetClass="com.tmobile.themechooser.ThemeChooser" />
     </header>
 
+    <!-- LockClock -->
+    <header
+        android:id="@+id/lock_clock"
+        android:icon="@drawable/ic_settings_date_time"
+        android:title="@string/lock_clock_title" >
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:targetClass="com.cyanogenmod.lockclock.preference.Preferences"
+            android:targetPackage="com.cyanogenmod.lockclock" />
+    </header>
+
+   <!-- INPUT CONTROLS -->
+    <header android:id="@+id/input_controls_section"
+        android:title="@string/header_category_input_controls" />
+
+    <!-- Homescreen -->
+    <header
+        android:id="@+id/homescreen_settings"
+        android:title="@string/homescreen_settings_title"
+        android:icon="@drawable/ic_settings_cmlauncher" />
+
+    <!-- Buttons -->
+    <header
+        android:icon="@drawable/ic_settings_buttons"
+        android:fragment="com.android.settings.eclipse.ButtonSettings"
+        android:title="@string/button_settings" />
+
     <!-- Powerwidgets -->
     <header
         android:id="@+id/interface_settings"
@@ -124,12 +151,6 @@
         android:icon="@drawable/ic_settings_display"
         android:fragment="com.android.settings.DisplaySettings"
         android:title="@string/display_settings" />
-
-    <!-- Buttons -->
-    <header
-        android:icon="@drawable/ic_settings_buttons"
-        android:fragment="com.android.settings.eclipse.ButtonSettings"
-        android:title="@string/button_settings" />
 
     <!-- Storage -->
     <header
