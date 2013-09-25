@@ -1657,6 +1657,7 @@
 
         <activity android:name=".eclipse.ButtonSettings" />
 
+        <activity android:name=".eclipse.NavigationBar" />
 
         <activity android:name=".profiles.NFCProfile"
                 android:theme="@android:style/Theme.NoDisplay">

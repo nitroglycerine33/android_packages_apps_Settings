@@ -1412,4 +1412,11 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
     <string name="use_custom_app_summary">Use custom application instead of the recent applications dialog</string>
     <string name="group_applications">Applications</string>
 
+    <!-- S3/S4 disable hardware keys -->
+    <string name="disable_hardkeys">Enable/disable keys</string>
+    <string name="hw_keys_title">Hardware Keys</string>
+    <string name="key_menu_enabled">Menu Key Enabled</string>
+    <string name="key_back_enabled">Back Key Enabled</string>
+    <string name="key_home_enabled">Home Key Enabled</string>
+
 </resources>
